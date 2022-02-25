@@ -1,0 +1,43 @@
+//////////login////////////////////
+<?php
+        include('includes/header.php');
+       $_POST['surnom'];
+       $_POST['password'];
+       $login = $_POST['surnom'];
+       $passwd = $_POST['password'];
+   if(isset($_POST) && !empty($login) && !empty($passwd))
+   {
+    
+     try
+    {
+      $bdd = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+    }
+     
+  catch(Exception $e)
+    {
+      die('Erreur : '.$e->getMessage());
+    }
+ 
+    
+  extract($_POST);
+ 
+  $sql = 'SELECT password FROM tbl_users WHERE surnom = $login';
+  $req = "mysql_query($sql) or die('Erreur SQL !<br>'.$sql.'<br>'.mysql_error())";
+   }
+     $data = 'mysql_fetch_assoc($req)';
+   
+  if($data['password'] != $passwd /*|| empty($_POST['surnom']) || empty($_POST['password'])*/ )
+  {
+       include('includes/recommencer.php');
+       include('includes/footer.php');
+    exit;
+  }
+  elseif ($data['password'] = $passwd )
+  {
+    session_start();
+    $_SESSION['surnom'] = $login;
+ 
+    include('includes/entrer.php');
+    include('includes/footer.php');
+  }   
+?>
